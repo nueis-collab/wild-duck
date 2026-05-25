@@ -25,7 +25,7 @@ button:active{transform:scale(0.97);}
 <canvas id="gc"></canvas>
 <div id="sS" class="scr on">
   <div style="display:flex;align-items:center;gap:32px;">
-    <canvas id="heroC" width="130" height="186"></canvas>
+    <canvas id="heroC" width="180" height="260"></canvas>
     <div style="text-align:right;">
       <div class="ttl">황야의 오리</div>
       <div class="sub">WILD DUCK</div>
@@ -65,10 +65,12 @@ button:active{transform:scale(0.97);}
   </div>
 </div>
 <div id="cS" class="scr">
-  <div class="ttl" style="font-size:26px;margin-bottom:8px;">🏆 도전과제</div>
-  <canvas id="chalC" width="520" height="330" style="border:2px solid #DAA520;border-radius:8px;margin-bottom:8px;"></canvas>
-  <div style="color:#DEB887;font-size:11px;margin-bottom:8px;text-align:center;font-family:Georgia,serif;">각 그룹의 도전과제를 모두 달성하면 보상이 해금됩니다</div>
-  <button onclick="showScr('sS')">← 뒤로</button>
+  <div style="display:flex;align-items:center;justify-content:center;width:100%;margin-bottom:6px;position:relative;">
+    <button onclick="showScr('sS')" style="position:absolute;left:10px;font-size:12px;padding:5px 13px;margin:0;">← 뒤로</button>
+    <div class="ttl" style="font-size:24px;">🏆 도전과제</div>
+  </div>
+  <canvas id="chalC" width="520" height="330" style="border:2px solid #DAA520;border-radius:8px;margin-bottom:4px;"></canvas>
+  <div style="color:#DEB887;font-size:10px;text-align:center;font-family:Georgia,serif;">각 그룹의 도전과제를 모두 달성하면 보상이 해금됩니다</div>
 </div>
 </div></div>
 
@@ -460,7 +462,6 @@ function draw3DDuck(c,x,y,p,idx,bc,looking){
     c.beginPath(); c.ellipse(x,y,20,24,0,0,Math.PI*2); c.stroke();
     c.globalAlpha=1;
   }
-  c.restore();
 }
 
 function drawStar5(c,cx,cy,r1,r2){
@@ -624,7 +625,9 @@ function drawChal(){
 
 function drawHero(){
   const c=document.getElementById('heroC').getContext('2d');
-  c.clearRect(0,0,130,186);
+  c.clearRect(0,0,180,260);
+  c.save();
+  c.scale(1.38,1.38);
   const x=60, y=108;
   const mc=gDuck?'#FFD700':'#F2F2F2';
   const wc=gDuck?'#E8C000':'#E0E0E0';
@@ -696,8 +699,21 @@ function drawHero(){
   c.fillStyle=fg; c.strokeStyle='#995500'; c.lineWidth=0.7;
   c.beginPath(); c.ellipse(x-10,y+28,9,5.5,-0.18,0,Math.PI*2); c.fill(); c.stroke();
   c.beginPath(); c.ellipse(x+10,y+28,9,5.5,0.18,0,Math.PI*2); c.fill(); c.stroke();
+  c.restore();
 }
 
 drawHero();
 drawBg();
+
+// 가로 회전 시 전체화면
+function tryFullscreen(){
+  const el=document.documentElement;
+  if(window.innerWidth>window.innerHeight){
+    if(el.requestFullscreen)el.requestFullscreen();
+    else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();
+    else if(el.mozRequestFullScreen)el.mozRequestFullScreen();
+  }
+}
+window.addEventListener('orientationchange',()=>{setTimeout(tryFullscreen,300);});
+screen.orientation&&screen.orientation.addEventListener('change',()=>{setTimeout(tryFullscreen,300);});
 </script>
